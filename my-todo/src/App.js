@@ -1,18 +1,46 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
+import Header from './conponents/header/header';
+import Main from './conponents/main/main';
 
 class App extends Component {
+  constructor(){
+    super();
+    this.state = {
+      inputArr:[]
+    }
+  }
+  updateDate(newdata){
+    if(!newdata || newdata.trim() === '')return;
+    let arr = this.state.inputArr;
+    arr.push({
+      name:newdata,
+      type:false
+    });
+    this.setState({inputArr:arr});
+  }
+  deteteDate(deleteDate){
+    let {inputArr} = this.state;
+    this.setState({
+      inputArr:inputArr.filter((e)=> e !== deleteDate)
+    })
+  }
+  changeType(changeVal){
+    let {inputArr} = this.state;
+    inputArr.forEach((e,i) => {
+      if(e === changeVal){
+        e.type = !e.type;
+      }
+    });
+    this.setState({
+      inputArr:inputArr
+    })
+  }
   render() {
     return (
-      <div className="App">
-        <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2>Welcome to React</h2>
-        </div>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
+      <div className="todoapp">
+        <Header updateDate={this.updateDate.bind(this)}></Header>
+        <Main list={this.state.inputArr} deleteDate={this.deteteDate.bind(this)} changeType={this.changeType.bind(this)}></Main>
       </div>
     );
   }
